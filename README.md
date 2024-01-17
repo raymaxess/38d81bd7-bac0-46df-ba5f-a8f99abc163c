@@ -25,6 +25,7 @@
 
    ```
    cd 38d81bd7-bac0-46df-ba5f-a8f99abc163c
+   touch .env
    ```
 
 4. Create the directory `storage/app/data` if it does not exist.
@@ -96,7 +97,7 @@ Hint: You must first arrange the numbers in ascending order. The median is the m
 To run the tests, use the following command:
 
 ```
-docker-compose run app ./vendor/bin/phpunit
+docker-compose run app php artisan test
 ```
 
 ## Clear cache
