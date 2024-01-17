@@ -227,6 +227,13 @@ class GenerateReport extends Command
     {
         $collection = collect();
         foreach ($data as $item) {
+            if ($className === StudentResponse::class) {
+                // Incomplete assessments will be ignored
+                if (!isset($item['completed']) || !$item['completed']) {
+                    continue;
+                }
+            }            
+            
             if (!$collection->contains(function ($collectionItem) use ($item) {
                 return $collectionItem->getId() === $item['id'];
             })) {
