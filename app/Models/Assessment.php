@@ -7,18 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Assessment extends Model
 {
-    // [
-    //   {
-    //     "id": "assessment1",
-    //     "name": "Numeracy",
-    //     "questions": [
-    //       {
-    //         "questionId": "numeracy1",
-    //         "position": 1
-    //       }
-    //     ]
-    //   }
-    // ]
     protected $fillable = ['id', 'name', 'questions'];
     public $incrementinsg = false;
     protected $keyType = 'string';
