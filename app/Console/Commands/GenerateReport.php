@@ -34,7 +34,20 @@ class GenerateReport extends Command
     protected $description = 'Generate student report';
 
     /**
-     * Execute the console command.
+     * Handles the generation of different types of reports for a student.
+     * 
+     * This function first prompts the user to enter a student ID, ensuring
+     * it's provided before proceeding. Then, it asks the user to choose the
+     * type of report to generate, offering options for Diagnostic, Progress,
+     * or Feedback reports. Each report type is represented by a numeric value
+     * (1 for Diagnostic, 2 for Progress, 3 for Feedback).
+     *
+     * The function supports:
+     * - Generating a Diagnostic Report
+     * - Generating a Progress Report
+     * - Generating a Feedback Report
+     *
+     * @return void
      */
     public function handle()
     {
@@ -68,6 +81,13 @@ class GenerateReport extends Command
         }
     }
 
+    /**
+     * Retrieves the responses of a specific student from a collection of student responses.
+     *
+     * @param mixed $studentId The ID of the student whose responses are to be retrieved.
+     * @param \Illuminate\Support\Collection $studentResponsesCollection A collection of student responses.
+     * @return \Illuminate\Support\Collection A collection of responses for the specified student.
+     */
     private function getStudentResponses($studentId, $studentResponsesCollection)
     {
         return $studentResponsesCollection
@@ -76,6 +96,15 @@ class GenerateReport extends Command
             });
     }
 
+    /**
+     * Displays a summary of the most recent assessment completed by a specified student.
+     *
+     * @param mixed $studentId The ID of the student whose recent assessment is to be displayed.
+     * @param object $recentStudentResponse An object representing the student's most recent response, including the assessment ID.
+     * @param \Illuminate\Support\Collection $assessmentCollection A collection of assessments.
+     * @param \Illuminate\Support\Collection $studentsCollection A collection of students' details.
+     * @return void
+     */
     private function displayRecentAssesmentSection($studentId, $recentstudentResponse, $assessmentCollection, $studentsCollection)
     {
         $student = $studentsCollection->firstWhere('id', $studentId);
@@ -121,6 +150,7 @@ class GenerateReport extends Command
             }
         }
 
+        // Display detailed assessment by strand
         foreach ($detailedAssesment as $strand => $assesment) {
             $this->info("{$strand}: {$assesment['correct']} out of {$assesment['count']} correct");
         }
@@ -140,6 +170,7 @@ class GenerateReport extends Command
             $this->info("{$student->firstName} {$student->lastName} has completed Numeracy assessment {$studentResponses->count()} times in total. Date and raw score given below: \n");
         }
         
+        // Display assessment date and raw score
         foreach ($studentResponses as $studentResponse) {
             $this->info("Date: {$studentResponse->getAssignedDate()}, Raw Score: {$studentResponse->results['rawScore']} out of " . count($studentResponse->responses));
         }
@@ -170,6 +201,7 @@ class GenerateReport extends Command
             $this->info("He got {$recentstudentResponse->results['rawScore']} questions right out of " . count($recentstudentResponse->responses) . ". Feedback for wrong answers given below: \n");
         }
 
+        // Display feedback for wrong answers
         foreach ($recentstudentResponse->responses as $response) {
             $question = $questionsCollection->firstWhere('id', $response['questionId']);
 
