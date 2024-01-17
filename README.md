@@ -18,13 +18,13 @@
 2. Clone the repository to your local machine.
 
    ```
-   git clone <repository-url>
+   git clone https://github.com/raymaxess/38d81bd7-bac0-46df-ba5f-a8f99abc163c.git
    ```
 
 3. Navigate to the project directory.
 
    ```
-   cd <project-directory>
+   cd 38d81bd7-bac0-46df-ba5f-a8f99abc163c
    ```
 
 4. Create the directory `storage/app/data` if it does not exist.
