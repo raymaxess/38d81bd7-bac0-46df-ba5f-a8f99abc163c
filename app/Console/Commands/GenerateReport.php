@@ -52,13 +52,8 @@ class GenerateReport extends Command
     public function handle()
     {
         $this->info('Please enter the following');
-        do {
-            $studentId = $this->ask('Student ID:');
-        } while (!$studentId);
-
-        do {
-            $reportType = $this->ask('Report to generate (1 for Diagnostic, 2 for Progress, 3 for Feedback)');
-        } while (!in_array($reportType, ['1', '2', '3']));
+        $studentId = $this->promptForStudentId();
+        $reportType = $this->promptForReportType();
 
         $data = $this->loadData(['students', 'assessments', 'student-responses', 'questions']);
         $studentsCollection = $this->createCollection($data['students'] ?? [], Student::class);
@@ -79,6 +74,22 @@ class GenerateReport extends Command
             default:
                 break;
         }
+    }
+
+    private function promptForStudentId()
+    {
+        do {
+            $studentId = $this->ask('Student ID:');
+        } while (!$studentId);
+        return $studentId;
+    }
+
+    private function promptForReportType()
+    {
+        do {
+            $reportType = $this->ask('Report to generate (1 for Diagnostic, 2 for Progress, 3 for Feedback)');
+        } while (!in_array($reportType, ['1', '2', '3']));
+        return $reportType;
     }
 
     /**
@@ -112,8 +123,7 @@ class GenerateReport extends Command
 
         if ($student && $assessment) {
             $this->info("{$student->firstName} {$student->lastName} recently completed {$assessment->name} assessment on {$recentstudentResponse->getCompletedDate()}");
-        }
-        else {
+        } else {
             $this->info("Warning: Student or assessment details not found");
         }
     }
@@ -169,7 +179,7 @@ class GenerateReport extends Command
         if ($student) {
             $this->info("{$student->firstName} {$student->lastName} has completed Numeracy assessment {$studentResponses->count()} times in total. Date and raw score given below: \n");
         }
-        
+
         // Display assessment date and raw score
         foreach ($studentResponses as $studentResponse) {
             $this->info("Date: {$studentResponse->getAssignedDate()}, Raw Score: {$studentResponse->results['rawScore']} out of " . count($studentResponse->responses));
@@ -182,8 +192,7 @@ class GenerateReport extends Command
             if ($difference < 0) {
                 $difference = $difference * -1;
                 $this->info("\n{$student->firstName} {$student->lastName} got {$difference} less correct in the recent completed assessment than the oldest");
-            }
-            else {
+            } else {
                 $this->info("\n{$student->firstName} {$student->lastName} got {$difference} more correct in the recent completed assessment than the oldest");
             }
         }
@@ -232,8 +241,8 @@ class GenerateReport extends Command
                 if (!isset($item['completed']) || !$item['completed']) {
                     continue;
                 }
-            }            
-            
+            }
+
             if (!$collection->contains(function ($collectionItem) use ($item) {
                 return $collectionItem->getId() === $item['id'];
             })) {
