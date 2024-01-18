@@ -63,13 +63,29 @@ class GenerateReport extends Command
 
         switch ($reportType) {
             case 1:
-                $this->generateDiagnosticReport($studentId, $studentResponsesCollection, $assessmentCollection, $questionsCollection, $studentsCollection);
+                $this->generateDiagnosticReport(
+                    $studentId,
+                    $studentResponsesCollection,
+                    $assessmentCollection,
+                    $questionsCollection,
+                    $studentsCollection
+                );
                 break;
             case 2:
-                $this->generateProgressReport($studentId, $studentResponsesCollection, $studentsCollection);
+                $this->generateProgressReport(
+                    $studentId,
+                    $studentResponsesCollection,
+                    $studentsCollection
+                );
                 break;
             case 3:
-                $this->generateFeedbackReport($studentId, $studentResponsesCollection, $assessmentCollection, $questionsCollection, $studentsCollection);
+                $this->generateFeedbackReport(
+                    $studentId,
+                    $studentResponsesCollection,
+                    $assessmentCollection,
+                    $questionsCollection,
+                    $studentsCollection
+                );
                 break;
             default:
                 break;
@@ -81,6 +97,7 @@ class GenerateReport extends Command
         do {
             $studentId = $this->ask('Student ID:');
         } while (!$studentId);
+
         return $studentId;
     }
 
@@ -89,6 +106,7 @@ class GenerateReport extends Command
         do {
             $reportType = $this->ask('Report to generate (1 for Diagnostic, 2 for Progress, 3 for Feedback)');
         } while (!in_array($reportType, ['1', '2', '3']));
+
         return $reportType;
     }
 
@@ -137,7 +155,12 @@ class GenerateReport extends Command
             $this->info("No assessment found for student {$studentId}");
             return;
         } else {
-            $this->displayRecentAssesmentSection($studentId, $recentstudentResponse, $assessmentCollection, $studentsCollection);
+            $this->displayRecentAssesmentSection(
+                $studentId,
+                $recentstudentResponse,
+                $assessmentCollection,
+                $studentsCollection
+            );
             $this->info("He got {$recentstudentResponse->results['rawScore']} questions right out of " . count($recentstudentResponse->responses) . ". Details by strand given below: \n");
         }
 

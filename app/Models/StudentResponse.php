@@ -14,7 +14,8 @@ class StudentResponse extends Model
     public $incrementinsg = false;
     protected $keyType = 'string';
 
-    public function __construct($studentResponseData) {
+    public function __construct($studentResponseData)
+    {
         $this->id = $studentResponseData['id'];
         $this->assessmentId = $studentResponseData['assessmentId'];
         $this->assigned = $studentResponseData['assigned'];
@@ -25,16 +26,19 @@ class StudentResponse extends Model
         $this->results = $studentResponseData['results'];
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getCompletedDate() {
+    public function getCompletedDate()
+    {
         $date = DateTime::createFromFormat('d/m/Y H:i:s', $this->completed);
         return $date->format('jS F Y g:i A');
     }
 
-    public function getAssignedDate() {
+    public function getAssignedDate()
+    {
         $date = DateTime::createFromFormat('d/m/Y H:i:s', $this->assigned);
         return $date->format('jS F Y');
     }
